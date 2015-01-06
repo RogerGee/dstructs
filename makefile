@@ -14,14 +14,15 @@ ARCHIVE = ar cr
 # header files
 DSTRUCTS_H = dstructs.h
 TREEMAP_H = treemap.h $(DSTRUCTS_H)
-DYNARRAY_H = dynarray.h
+DYNARRAY_H = dynarray.h $(DSTRUCTS_H)
 LIST_H = list.h
 STACK_H = stack.h $(DYNARRAY_H)
 QUEUE_H = stack.h $(DYNARRAY_H)
+HASHMAP_H = hashmap.h $(DSTRUCTS_H)
 
 # output files
 LIBRARY = dstructs.a
-OBJECTS = treemap.o dynarray.o list.o queue.o stack.o
+OBJECTS = treemap.o dynarray.o list.o queue.o stack.o hashmap.o
 ifeq ($(TEMPDIR),)
 # default to /tmp if TEMPDIR environment variable doesn't exist; I
 # use TEMPDIR for my own purposes (TMP and TMPDIR are standards)
@@ -108,3 +109,6 @@ $(OBJDIR)queue.o: queue.c $(QUEUE_H)
 
 $(OBJDIR)list.o: list.c $(LIST_H)
 	$(COMPILE)$(OBJDIR)list.o list.c
+
+$(OBJDIR)hashmap.o: hashmap.c $(HASHMAP_H)
+	$(COMPILE)$(OBJDIR)hashmap.o hashmap.c

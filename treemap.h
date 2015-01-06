@@ -1,9 +1,9 @@
 /* treemap.h */
 #ifndef DSTRUCTS_TREEMAP_H
 #define DSTRUCTS_TREEMAP_H
+#include "dstructs.h"
 
 /* typedefs */
-typedef int (*key_comparator)(const void* left,const void* right); /* compare keys 'left' and 'right' */
 typedef void (*key_callback)(void* key); /* perform operation on 'key' when called */
 
 /* provide basic key types that a user may use to implement a map */
