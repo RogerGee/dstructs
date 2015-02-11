@@ -36,9 +36,9 @@ endif
 OBJECTS := $(addprefix $(OBJDIR),$(OBJECTS))
 
 # rules
-all: dstructs.a
+all: libdstructs.a
 
-debug: dstructs-debug.a
+debug: libdstructs-debug.a
 
 package:
 # check to make sure the environment is correct
@@ -87,10 +87,10 @@ clean:
 	@rm --verbose -rf dobj/
 	@rm -f --verbose $(LIBRARY)
 
-dstructs.a: $(OBJDIR) $(OBJECTS)
-	$(ARCHIVE) dstructs.a $(OBJECTS)
-dstructs-debug.a: $(OBJDIR) $(OBJECTS)
-	$(ARCHIVE) dstructs-debug.a $(OBJECTS)
+libdstructs.a: $(OBJDIR) $(OBJECTS)
+	$(ARCHIVE) libdstructs.a $(OBJECTS)
+libdstructs-debug.a: $(OBJDIR) $(OBJECTS)
+	$(ARCHIVE) libdstructs-debug.a $(OBJECTS)
 
 $(OBJDIR):
 	mkdir $(OBJDIR)

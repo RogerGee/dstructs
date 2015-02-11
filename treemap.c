@@ -13,7 +13,7 @@ struct tree_node
 struct key_info
 {
     key_comparator compar;
-    key_callback dstor;
+    destructor dstor;
 };
 struct key_impl_info
 {
@@ -96,7 +96,7 @@ static void tree_node_delete(struct tree_node* node)
         }
     }
 }
-static void tree_node_delete_dstor(struct tree_node* node,key_callback dstor)
+static void tree_node_delete_dstor(struct tree_node* node,destructor dstor)
 {
     /* this function calls a user-provided destructor on each key object */
     int i;
@@ -303,14 +303,14 @@ static void tree_node_do_fix(struct tree_node* node,struct tree_node* parent)
 }
 
 /* treemap */
-struct treemap* treemap_new(key_comparator compar,key_callback dstor)
+struct treemap* treemap_new(key_comparator compar,destructor dstor)
 {
     struct treemap* treemap;
     treemap = malloc(sizeof(struct treemap));
     treemap_init(treemap,compar,dstor);
     return treemap;
 }
-struct treemap* treemap_new_ex(key_comparator compar,key_callback dstor,void** keys,int size)
+struct treemap* treemap_new_ex(key_comparator compar,destructor dstor,void** keys,int size)
 {
     struct treemap* treemap;
     treemap = malloc(sizeof(struct treemap));
@@ -322,7 +322,7 @@ void treemap_free(struct treemap* treemap)
     treemap_delete(treemap);
     free(treemap);
 }
-void treemap_init(struct treemap* treemap,key_comparator compar,key_callback dstor)
+void treemap_init(struct treemap* treemap,key_comparator compar,destructor dstor)
 {
     treemap->root = NULL;
     treemap->compar = compar;
@@ -369,7 +369,7 @@ static void treemap_init_ex_recursive(struct tree_node** nodes,int size,void*** 
         dynamic_array_free(arr);
     }
 }
-void treemap_init_ex(struct treemap* treemap,key_comparator compar,key_callback dstor,void** keys,int size)
+void treemap_init_ex(struct treemap* treemap,key_comparator compar,destructor dstor,void** keys,int size)
 {
     /* 'keys' must be an array of pointers of size 'size' that point to
        individual tree_key structures allocated on the heap */

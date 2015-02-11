@@ -1,5 +1,6 @@
 obj/
 dobj/
-dstructs.a
+dstructs-debug.a
+libdstructs.a
 test.c
 test

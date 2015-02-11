@@ -9,7 +9,7 @@ struct queue* queue_new()
     queue_init(q);
     return q;
 }
-struct queue* queue_new_ex(int initialAlloc)
+struct queue* queue_new_ex(size_t initialAlloc)
 {
     struct queue* q;
     q = malloc(sizeof(struct queue));
@@ -31,7 +31,7 @@ void queue_init(struct queue* q)
     q->q_head = 0;
     dynamic_array_init(&q->q_data);
 }
-void queue_init_ex(struct queue* q,int initialAlloc)
+void queue_init_ex(struct queue* q,size_t initialAlloc)
 {
     q->q_head = 0;
     dynamic_array_init_ex(&q->q_data,initialAlloc);
