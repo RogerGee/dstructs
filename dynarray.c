@@ -52,10 +52,8 @@ void dynamic_array_delete(struct dynamic_array* arr)
 void dynamic_array_delete_ex(struct dynamic_array* arr,destructor dstor)
 {
     size_t i;
-    void* elem;
-    elem = arr->da_data;
-    for (i = 0;i < arr->da_top;++i,elem += sizeof(void*))
-        (*dstor)(elem);
+    for (i = 0;i < arr->da_top;++i)
+        (*dstor)(arr->da_data[i]);
     free(arr->da_data);
     arr->da_data = NULL;
     arr->da_cap = 0;
