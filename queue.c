@@ -18,8 +18,10 @@ struct queue* queue_new_ex(destructor dstor,size_t initialAlloc)
 }
 void queue_free(struct queue* q)
 {
-    queue_delete(q);
-    free(q);
+    if (q != NULL) {
+        queue_delete(q);
+        free(q);
+    }
 }
 void queue_init(struct queue* q,destructor dstor)
 {
@@ -59,4 +61,24 @@ int queue_pop(struct queue* q)
         return 1; /* true, queue is still non-empty */
     }
     return 0; /* false */
+}
+void queue_reorder_head(struct queue* q)
+{
+    /* we want to provide an efficient and convinient way to
+       pop the head and re-enqueue it */
+    if (q->q_head < q->q_data.da_top) {
+        if (q->q_data.da_top < q->q_data.da_cap)
+            q->q_data.da_data[q->q_data.da_top++] = q->q_data.da_data[q->q_head++];
+        else {
+            /* the enqueue operation would incur a memory re-allocation; in this case shift the
+               elements down so that we save having to do the memory allocation */
+            size_t i, j;
+            void* ptr = q->q_data.da_data[q->q_head];
+            for (i = q->q_head+1,j = 0;i < q->q_data.da_top;++i,++j)
+                q->q_data.da_data[j] = q->q_data.da_data[i];
+            q->q_data.da_data[j] = ptr;
+            q->q_data.da_top = q->q_data.da_top - q->q_head;
+            q->q_head = 0;
+        }
+    }
 }

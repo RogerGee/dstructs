@@ -229,7 +229,6 @@ static void* tree_node_delete_key(struct tree_node* node,struct key_impl_info* i
     /* delete the key 'k': call its destructor if it was specified */
     if (info->keyinfo->dstor != NULL)
         (*info->keyinfo->dstor)(k);
-    free(k);
     return swapKey;
 }
 static void tree_node_remove_key(struct tree_node* node,int keyIndex,int childIndex)
@@ -319,11 +318,14 @@ struct treemap* treemap_new_ex(key_comparator compar,destructor dstor,void** key
 }
 void treemap_free(struct treemap* treemap)
 {
-    treemap_delete(treemap);
-    free(treemap);
+    if (treemap != NULL) {
+        treemap_delete(treemap);
+        free(treemap);
+    }
 }
 void treemap_init(struct treemap* treemap,key_comparator compar,destructor dstor)
 {
+    treemap->count = 0;
     treemap->root = NULL;
     treemap->compar = compar;
     treemap->dstor = dstor;
@@ -372,11 +374,12 @@ static void treemap_init_ex_recursive(struct tree_node** nodes,int size,void*** 
 void treemap_init_ex(struct treemap* treemap,key_comparator compar,destructor dstor,void** keys,int size)
 {
     /* 'keys' must be an array of pointers of size 'size' that point to
-       individual tree_key structures allocated on the heap */
+       individual tree key structures allocated on the heap */
     int i, j, k, sz;
     void** arr, *plast;
     struct dynamic_array* levels;
     /* check size requirements */
+    treemap->count = size<0 ? 0 : size;
     if (size <= 0)
         return;
     /* we must ensure that the data is sorted */
@@ -521,6 +524,7 @@ int treemap_insert(struct treemap* treemap,void* key)
         treemap->root = malloc(sizeof(struct tree_node));
         tree_node_init(treemap->root);
         treemap->root->keys[0] = key;
+        ++treemap->count;
         return 0;
     }
     kinfo.compar = treemap->compar;
@@ -530,6 +534,7 @@ int treemap_insert(struct treemap* treemap,void* key)
     /* recursively insert element into tree */
     if (treemap_insert_recursive(&treemap->root,NULL,&info) == 1)
         return 1;
+    ++treemap->count;
     return 0;
 }
 static void treemap_search_recursive(struct search_impl_info* info)
@@ -651,6 +656,7 @@ int treemap_remove(struct treemap* treemap,const void* key)
         if ((info.info.key = tree_node_delete_key(info.node,&info.info,info.index)) != NULL)
             /* repair tree if removal left hole in tree */
             treemap_repair_recursive(&treemap->root,NULL,&info.info);
+        --treemap->count;
         return 0;
     }
     return 1;
@@ -672,4 +678,25 @@ void treemap_traversal_inorder(struct treemap* treemap,key_callback callback)
 {
     if (treemap->root != NULL)
         treemap_traversal_inorder_recursive(treemap->root,callback);
+}
+static void treemap_filter_count_recursive(struct tree_node* node,int* num,key_filter_callback callback)
+{
+    int i;
+    i = 0;
+    while (node->keys[i] != NULL) {
+        if (node->children[i] != NULL)
+            treemap_filter_count_recursive(node->children[i],num,callback);
+        if ( (*callback)(node->keys[i]) )
+            ++ (*num);
+        ++i;
+    }
+    if (node->children[i] != NULL)
+        treemap_filter_count_recursive(node->children[i],num,callback);
+}
+int treemap_filter_count(struct treemap* treemap,key_filter_callback callback)
+{
+    int num = 0;
+    if (treemap->root != NULL)
+        treemap_filter_count_recursive(treemap->root,&num,callback);
+    return num;
 }

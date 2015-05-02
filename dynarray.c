@@ -19,16 +19,20 @@ struct dynamic_array* dynamic_array_new_ex(size_t initialAlloc)
 }
 void dynamic_array_free(struct dynamic_array* arr)
 {
-    dynamic_array_delete(arr);
-    free(arr);
+    if (arr != NULL) {
+        dynamic_array_delete(arr);
+        free(arr);
+    }
 }
 void dynamic_array_free_ex(struct dynamic_array* arr,destructor dstor)
 {
-    size_t i;
-    for (i = 0;i < arr->da_top;++i)
-        (*dstor)(arr->da_data[i]);
-    dynamic_array_delete(arr);
-    free(arr);
+    if (arr != NULL) {
+        size_t i;
+        for (i = 0;i < arr->da_top;++i)
+            (*dstor)(arr->da_data[i]);
+        dynamic_array_delete(arr);
+        free(arr);
+    }
 }
 void dynamic_array_init(struct dynamic_array* arr)
 {

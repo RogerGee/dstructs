@@ -18,8 +18,10 @@ struct stack* stack_new_ex(destructor dstor,size_t initialAlloc)
 }
 void stack_free(struct stack* stk)
 {
-    stack_delete(stk);
-    free(stk);
+    if (stk != NULL) {
+        stack_delete(stk);
+        free(stk);
+    }
 }
 void stack_init(struct stack* stk,destructor dstor)
 {

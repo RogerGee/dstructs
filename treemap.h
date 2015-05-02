@@ -21,6 +21,7 @@ struct tree_node;
    be provided (set to NULL if not used) to delete the object before it is freed */
 struct treemap
 {
+    int count;
     struct tree_node* root;
     key_comparator compar;
     destructor dstor;
@@ -34,6 +35,7 @@ void treemap_delete(struct treemap* treemap);
 int treemap_insert(struct treemap* treemap,void* key);
 void* treemap_lookup(struct treemap* treemap,const void* key);
 int treemap_remove(struct treemap* treemap,const void* key);
+int treemap_filter_count(struct treemap* treemap,key_filter_callback callback);
 void treemap_traversal_inorder(struct treemap* treemap,key_callback callback);
 
 #endif

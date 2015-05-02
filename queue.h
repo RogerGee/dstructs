@@ -18,8 +18,9 @@ void queue_delete(struct queue* q);
 static inline void queue_push(struct queue* q,void* value)
 { dynamic_array_pushback(&q->q_data,value); }
 int queue_pop(struct queue* q);
+void queue_reorder_head(struct queue* q); /* pop off head, and push it back on */
 static inline void* queue_next(struct queue* q)
-{ return q->q_head < q->q_data.da_top ? dynamic_array_getat(&q->q_data,q->q_head) : (void*)0; }
+{ return q->q_head < q->q_data.da_top ? q->q_data.da_data[q->q_head] : (void*)0; }
 static inline size_t queue_getsize(struct queue* q)
 { return q->q_data.da_top - q->q_head; }
 static inline void** queue_getbuffer(struct queue* q)
