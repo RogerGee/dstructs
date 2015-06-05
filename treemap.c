@@ -306,6 +306,8 @@ struct treemap* treemap_new(key_comparator compar,destructor dstor)
 {
     struct treemap* treemap;
     treemap = malloc(sizeof(struct treemap));
+    if (treemap == NULL)
+        return NULL;
     treemap_init(treemap,compar,dstor);
     return treemap;
 }
@@ -313,6 +315,8 @@ struct treemap* treemap_new_ex(key_comparator compar,destructor dstor,void** key
 {
     struct treemap* treemap;
     treemap = malloc(sizeof(struct treemap));
+    if (treemap == NULL)
+        return NULL;
     treemap_init_ex(treemap,compar,dstor,keys,size);
     return treemap;
 }

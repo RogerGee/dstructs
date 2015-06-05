@@ -6,6 +6,8 @@ struct queue* queue_new(destructor dstor)
 {
     struct queue* q;
     q = malloc(sizeof(struct queue));
+    if (q == NULL)
+        return NULL;
     queue_init(q,dstor);
     return q;
 }
@@ -13,6 +15,8 @@ struct queue* queue_new_ex(destructor dstor,size_t initialAlloc)
 {
     struct queue* q;
     q = malloc(sizeof(struct queue));
+    if (q == NULL)
+        return NULL;
     queue_init_ex(q,dstor,initialAlloc);
     return q;    
 }

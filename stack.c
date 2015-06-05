@@ -6,6 +6,8 @@ struct stack* stack_new(destructor dstor)
 {
     struct stack* stk;
     stk = malloc(sizeof(struct stack));
+    if (stk == NULL)
+        return NULL;
     stack_init(stk,dstor);
     return stk;
 }
@@ -13,6 +15,8 @@ struct stack* stack_new_ex(destructor dstor,size_t initialAlloc)
 {
     struct stack* stk;
     stk = malloc(sizeof(struct stack));
+    if (stk == NULL)
+        return NULL;
     stack_init_ex(stk,dstor,initialAlloc);
     return stk;
 }

@@ -34,6 +34,8 @@ struct hashmap* hashmap_new(int size,hash_function hash,key_comparator compar)
 {
     struct hashmap* hm;
     hm = malloc(sizeof(struct hashmap));
+    if (hm == NULL)
+        return NULL;
     hashmap_init(hm,size,hash,compar);
     return hm;
 }

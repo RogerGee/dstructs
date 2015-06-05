@@ -7,6 +7,8 @@ struct dynamic_array* dynamic_array_new()
 {
     struct dynamic_array* arr;
     arr = malloc(sizeof(struct dynamic_array));
+    if (arr == NULL)
+        return NULL;
     dynamic_array_init(arr);
     return arr;
 }
@@ -14,6 +16,8 @@ struct dynamic_array* dynamic_array_new_ex(size_t initialAlloc)
 {
     struct dynamic_array* arr;
     arr = malloc(sizeof(struct dynamic_array));
+    if (arr == NULL)
+        return NULL;
     dynamic_array_init_ex(arr,initialAlloc);
     return arr;
 }
