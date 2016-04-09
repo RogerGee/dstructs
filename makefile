@@ -21,7 +21,7 @@ QUEUE_H = stack.h $(DYNARRAY_H)
 HASHMAP_H = hashmap.h $(DSTRUCTS_H)
 
 # output files
-LIBRARY = dstructs.a
+LIBRARY = libdstructs.a
 OBJECTS = treemap.o dynarray.o list.o queue.o stack.o hashmap.o
 ifeq ($(TEMPDIR),)
 # default to /tmp if TEMPDIR environment variable doesn't exist; I
@@ -66,7 +66,7 @@ package:
 	@echo "Depends: libc6" >> $(CONTROL_FILE)
 # copy package files
 	@cp -p $(LIBRARY) $(LIBDIR)
-	@cp -p tree.h dynarray.h queue.h stack.h list.h $(INCDIR)
+	@cp -p treemap.h hashmap.h dynarray.h queue.h stack.h list.h dstructs.h $(INCDIR)
 # build package; let dpkg-deb name the package based on the control file contents
 	@dpkg-deb --build $(PACKAGEDIR) .
 
@@ -75,7 +75,7 @@ install:
 # copy files to local installation directories
 	@cp --verbose $(LIBRARY) /usr/local/lib
 	@mkdir /usr/local/include/dstructs
-	@cp --verbose tree.h dynarray.h queue.h stack.h list.h /usr/local/include/dstructs
+	@cp --verbose treemap.h hashmap.h dynarray.h queue.h stack.h list.h dstructs.h /usr/local/include/dstructs
 
 uninstall:
 	@rm --verbose -f /usr/local/lib/$(LIBRARY)
