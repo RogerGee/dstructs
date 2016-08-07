@@ -1,6 +1,7 @@
 /* dstructs.h */
 #ifndef DSTRUCTS_H
 #define DSTRUCTS_H
+#include <stdbool.h>
 
 typedef void (*destructor)(void* elem); /* perform cleanup on element */
 typedef int (*key_comparator)(const void* left,const void* right); /* compare keys 'left' and 'right' */

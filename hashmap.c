@@ -19,6 +19,17 @@ int hash_string(const char* key,int size)
     return hash%size;
 }
 
+int hash_pstring(const char** key,int size)
+{
+    unsigned long hash = 5381;
+    const char* rkey = *key;
+    while (*rkey) {
+        hash = ((hash<<5) + hash) + *rkey;
+        ++rkey;
+    }
+    return hash%size;    
+}
+
 struct hash_bucket
 {
     void* key;
@@ -98,6 +109,36 @@ void hashmap_delete_ex(struct hashmap* hm,destructor dstor)
     hm->hm_data = NULL;
     hm->hm_hash = NULL;
     hm->hm_compar = NULL;
+}
+void hashmap_reset(struct hashmap* hm)
+{
+    int i;
+    for (i = 0;i < hm->hm_size;++i) {
+        struct hash_bucket* hb;
+        hb = hm->hm_data[i].nxt;
+        while (hb != NULL) {
+            struct hash_bucket* tmp = hb->nxt;
+            free(hb);
+            hb = tmp;
+        }
+    }
+}
+void hashmap_reset_ex(struct hashmap* hm,destructor dstor)
+{
+    int i;
+    for (i = 0;i < hm->hm_size;++i) {
+        if (hm->hm_data[i].key != NULL) {
+            struct hash_bucket* hb;
+            (*dstor)(hm->hm_data[i].key);
+            hb = hm->hm_data[i].nxt;
+            while (hb != NULL) {
+                struct hash_bucket* tmp = hb->nxt;
+                (*dstor)(hb->key);
+                free(hb);
+                hb = tmp;
+            }
+        }
+    }
 }
 int hashmap_insert(struct hashmap* hm,void* key)
 {

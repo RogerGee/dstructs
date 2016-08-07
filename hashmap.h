@@ -9,6 +9,7 @@ typedef int (*hash_function)(const void* key,int size);
 /* hash functions for common key types */
 int hash_int(const int* key,int size);
 int hash_string(const char* key,int size);
+int hash_pstring(const char** key,int size);
 
 struct hash_bucket;
 
@@ -27,6 +28,8 @@ void hashmap_free_ex(struct hashmap* hm,destructor dstor);
 void hashmap_init(struct hashmap* hm,int size,hash_function hash,key_comparator compar);
 void hashmap_delete(struct hashmap* hm);
 void hashmap_delete_ex(struct hashmap* hm,destructor dstor);
+void hashmap_reset(struct hashmap* hm);
+void hashmap_reset_ex(struct hashmap* hm,destructor dstor);
 int hashmap_insert(struct hashmap* hm,void* key);
 void* hashmap_lookup(struct hashmap* hm,const void* key);
 int hashmap_remove(struct hashmap* hm,const void* key);
