@@ -1,0 +1,13 @@
+dstructs - v0.0.1
+
+--------------------------------------------------------------------------------
+This repository contains generic C data structures. They operate on void*
+instances (hence 'generic').
+
+Structures available:
+
+    - stack (for completeness, not really useful)
+    - queue (ditto, more or less)
+    - dynarray (a resizing array implementation)
+    - hashmap (a hashtable that provides a map)
+    - treemap (a tree that provides a map)
