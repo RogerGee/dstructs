@@ -114,12 +114,15 @@ void hashmap_reset(struct hashmap* hm)
 {
     int i;
     for (i = 0;i < hm->hm_size;++i) {
-        struct hash_bucket* hb;
-        hb = hm->hm_data[i].nxt;
-        while (hb != NULL) {
-            struct hash_bucket* tmp = hb->nxt;
-            free(hb);
-            hb = tmp;
+        if (hm->hm_data[i].key != NULL) {
+            struct hash_bucket* hb;
+            hb = hm->hm_data[i].nxt;
+            while (hb != NULL) {
+                struct hash_bucket* tmp = hb->nxt;
+                free(hb);
+                hb = tmp;
+            }
+            hash_bucket_default(hm->hm_data + i);
         }
     }
 }
@@ -137,6 +140,7 @@ void hashmap_reset_ex(struct hashmap* hm,destructor dstor)
                 free(hb);
                 hb = tmp;
             }
+            hash_bucket_default(hm->hm_data + i);
         }
     }
 }
