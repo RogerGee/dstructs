@@ -37,5 +37,6 @@ void* treemap_lookup(struct treemap* treemap,const void* key);
 int treemap_remove(struct treemap* treemap,const void* key);
 int treemap_filter_count(struct treemap* treemap,key_filter_callback callback);
 void treemap_traversal_inorder(struct treemap* treemap,key_callback callback);
+void treemap_traversal_inorder_ex(struct treemap* treemap,key_callback_ex callback,void* data);
 
 #endif

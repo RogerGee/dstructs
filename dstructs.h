@@ -3,10 +3,20 @@
 #define DSTRUCTS_H
 #include <stdbool.h>
 
-typedef void (*destructor)(void* elem); /* perform cleanup on element */
-typedef int (*key_comparator)(const void* left,const void* right); /* compare keys 'left' and 'right' */
-typedef void (*key_callback)(void* key); /* perform operation on 'key' when called */
-typedef int (*key_filter_callback)(void* key); /* perform operation on 'key' when called (used for filtering keys) */
+/* Performs cleanup on element */
+typedef void (*destructor)(void* elem);
+
+/* Compares keys 'left' and 'right'. */
+typedef int (*key_comparator)(const void* left,const void* right);
+
+/* Performs operation on 'key' when called. Extended version allows for callback
+ * info to be passed.
+ */
+typedef void (*key_callback)(void* key);
+typedef void (*key_callback_ex)(void* key,void* data);
+
+/* Perform operation on 'key' when called (used for filtering keys). */
+typedef int (*key_filter_callback)(void* key);
 
 /* common comparators */
 static inline int intcmp(const int* left,const int* right)

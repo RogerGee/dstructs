@@ -683,6 +683,26 @@ void treemap_traversal_inorder(struct treemap* treemap,key_callback callback)
     if (treemap->root != NULL)
         treemap_traversal_inorder_recursive(treemap->root,callback);
 }
+static void treemap_traversal_inorder_recursive_ex(struct tree_node* node,key_callback_ex callback,void* data)
+{
+    int i;
+    i = 0;
+    while (node->keys[i] != NULL) {
+        if (node->children[i] != NULL)
+            treemap_traversal_inorder_recursive_ex(node->children[i],callback,data);
+        (*callback)(node->keys[i],data);
+        ++i;
+    }
+    if (node->children[i] != NULL) {
+        treemap_traversal_inorder_recursive_ex(node->children[i],callback,data);
+    }
+}
+void treemap_traversal_inorder_ex(struct treemap* treemap,key_callback_ex callback,void* data)
+{
+    if (treemap->root != NULL) {
+        treemap_traversal_inorder_recursive_ex(treemap->root,callback,data);
+    }
+}
 static void treemap_filter_count_recursive(struct tree_node* node,int* num,key_filter_callback callback)
 {
     int i;
